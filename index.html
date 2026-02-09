@@ -85,7 +85,7 @@
 <div id="message-overlay">
   <div class="message-card">
     <h2>Liebste Oma 💐</h2>
-    <p>84 Jahre voller Liebe, Wärme und wunderschöner Erinnerungen. Du bist der Sonnenschein unserer Familie und machst die Welt jeden Tag ein bisschen schöner – genau wie Blumen. 🌸</p>
+    <p>84 Jahre voller Liebe, Wärme und wunderschöner Erinnerungen. Du bist der Sonnenschein unserer Familie und machst die Welt jeden Tag ein bisschen schöner. 🌸</p>
     <div class="flower-divider">🌷 🌻 🌹 🌺 🌼</div>
     <p>Ich wünsche dir von ganzem Herzen Gesundheit, Freude und ganz viele bunte Blumen in deinem neuen Lebensjahr!</p>
     <div class="signature">In Liebe, dein Pascal 💝</div>
@@ -495,17 +495,20 @@ function launchConfetti(){
   const ctx=cv.getContext('2d');
   const particles=[];
   const colors=['#ff69b4','#ff6b6b','#ffa07a','#dda0dd','#f0e68c','#87ceeb','#ffd700','#ff1493','#da70d6','#32cd32'];
-  for(let i=0;i<300;i++) particles.push({x:Math.random()*cv.width,y:-20-Math.random()*500,
+  const centerX = cv.width / 2, centerY = cv.height * 0.45;
+  for(let i=0;i<300;i++){const angle=Math.random()*Math.PI*2;const speed=2+Math.random()*6;
+    particles.push({x:centerX+(Math.random()-0.5)*60,y:centerY+(Math.random()-0.5)*30,
     w:6+Math.random()*8,h:4+Math.random()*6,color:colors[Math.floor(Math.random()*colors.length)],
-    vx:(Math.random()-0.5)*4,vy:1.5+Math.random()*3,rot:Math.random()*Math.PI*2,
-    rotSpd:(Math.random()-0.5)*0.15,shape:Math.random()>0.5?'rect':'circle',opacity:1});
+    vx:Math.cos(angle)*speed,vy:-Math.abs(Math.sin(angle)*speed)-Math.random()*4,rot:Math.random()*Math.PI*2,
+    rotSpd:(Math.random()-0.5)*0.15,shape:Math.random()>0.5?'rect':'circle',opacity:1});}
   const emojis=['🌸','🌺','🌷','🌻','🌹','💐','🌼','✨','🎂','🥳','💝','🎉'];
-  for(let i=0;i<50;i++) particles.push({x:Math.random()*cv.width,y:-20-Math.random()*600,
-    emoji:emojis[Math.floor(Math.random()*emojis.length)],vx:(Math.random()-0.5)*2,
-    vy:1+Math.random()*2,rot:0,rotSpd:(Math.random()-0.5)*0.05,opacity:1,size:16+Math.random()*16});
+  for(let i=0;i<50;i++){const angle=Math.random()*Math.PI*2;const speed=1.5+Math.random()*4;
+    particles.push({x:centerX+(Math.random()-0.5)*40,y:centerY+(Math.random()-0.5)*20,
+    emoji:emojis[Math.floor(Math.random()*emojis.length)],vx:Math.cos(angle)*speed,
+    vy:-Math.abs(Math.sin(angle)*speed)-Math.random()*2,rot:0,rotSpd:(Math.random()-0.5)*0.05,opacity:1,size:16+Math.random()*16});}
   let frame=0;
   function anim(){frame++; ctx.clearRect(0,0,cv.width,cv.height);
-    particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.03;p.rot+=p.rotSpd;
+    particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.06;p.rot+=p.rotSpd;
       if(frame>500)p.opacity-=0.003; if(p.opacity<=0)return;
       ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,p.opacity);
       if(p.emoji){ctx.font=`${p.size}px serif`;ctx.fillText(p.emoji,0,0);}
